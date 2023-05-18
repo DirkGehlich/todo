@@ -12,6 +12,8 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
+
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,13 +27,17 @@ class TodoControllerTest {
         return new Todo(randomAlphabetic(10), randomAlphabetic(20));
     }
 
+    private void addTodo(Todo todo) {
+        RestAssured.given().contentType(ContentType.JSON).body(todo).post(API_ROOT);
+    }
+
 
     @Test
     public void contextLoads() {
-    };
+    }
 
     @Test
-    void givenEmptyTodoList_whenAddingRandomTodo_Return200Created() {
+    void givenEmptyTodoList_whenAddingRandomTodo_Return201Created() {
         Todo todo = createRandomTodo();
 
         Response response = RestAssured.given().contentType(ContentType.JSON).body(todo).post(API_ROOT);
@@ -42,7 +48,7 @@ class TodoControllerTest {
     @Test
     void givenExistingTodo_whenAddingTodoWithSameTitle_Return400BadRequest() {
         Todo todo = createRandomTodo();
-        RestAssured.given().contentType(ContentType.JSON).body(todo).post(API_ROOT);
+        addTodo(todo);
 
         Response response = RestAssured.given().contentType(ContentType.JSON).body(todo).post(API_ROOT);
 

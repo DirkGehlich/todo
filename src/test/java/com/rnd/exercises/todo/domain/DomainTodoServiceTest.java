@@ -4,6 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
@@ -23,6 +26,28 @@ class DomainTodoServiceTest {
     void setUp() {
         todoRepository = mock(TodoRepository.class);
         todoService = new DomainTodoService(todoRepository);
+    }
+
+    @Test
+    void givenNoTodosInList_whenGetAll_thenReturnEmptyList() {
+        List<Todo> existingTodos = new ArrayList<>();
+        when(todoRepository.findAll()).thenReturn(existingTodos);
+
+        Iterable<Todo> todos = todoService.getAll();
+
+        assertIterableEquals(todos, existingTodos);
+    }
+
+    @Test
+    void givenTodoInList_whenGetAll_thenReturnList() {
+        Todo newTodo = createRandomTodo();
+        Todo anotherTodo = createRandomTodo();
+        List<Todo> existingTodos = List.of(newTodo, anotherTodo);
+        when(todoRepository.findAll()).thenReturn(existingTodos);
+
+        Iterable<Todo> todos = todoService.getAll();
+
+        assertIterableEquals(todos, existingTodos);
     }
 
     @Test

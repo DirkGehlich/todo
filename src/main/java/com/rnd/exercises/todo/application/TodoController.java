@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/todos")
 public class TodoController {
@@ -17,5 +19,11 @@ public class TodoController {
     @ResponseStatus(HttpStatus.CREATED)
     public void add(@RequestBody final Todo todo) {
         todoService.add(todo);
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public Iterable<Todo> getAll() {
+        return todoService.getAll();
     }
 }
