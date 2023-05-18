@@ -5,6 +5,7 @@ import com.rnd.exercises.todo.domain.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -21,5 +22,10 @@ public class CrudTodoRepository implements TodoRepository {
     @Override
     public Optional<Todo> findByTitle(String title) {
         return repo.findById(title);
+    }
+
+    @Override
+    public Iterable<Todo> findAll() {
+        return repo.findAll();
     }
 }
