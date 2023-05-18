@@ -1,4 +1,4 @@
-package com.rnd.exercises.todo.infrastructure.h2;
+package com.rnd.exercises.todo.infrastructure;
 
 import com.rnd.exercises.todo.domain.Todo;
 import com.rnd.exercises.todo.domain.TodoRepository;
@@ -8,9 +8,10 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public class H2TodoRepository implements TodoRepository {
+public class CrudTodoRepository implements TodoRepository {
 
-    @Autowired SpringDataH2TodoRepository repo;
+    @Autowired
+    SpringDataCrudTodoRepository repo;
 
     @Override
     public void add(Todo todo) {
