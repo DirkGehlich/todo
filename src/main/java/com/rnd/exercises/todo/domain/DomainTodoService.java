@@ -3,8 +3,6 @@ package com.rnd.exercises.todo.domain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class DomainTodoService implements TodoService{
 
@@ -17,7 +15,7 @@ public class DomainTodoService implements TodoService{
 
     public void add(Todo todo) {
         todoRepository.findByTitle(todo.getTitle()).ifPresent(t -> {throw new AlreadyPresentException("Todo already present!");});
-        todoRepository.add(todo);
+        todoRepository.save(todo);
     }
 
     @Override
@@ -30,5 +28,17 @@ public class DomainTodoService implements TodoService{
         todoRepository
                 .findByTitle(title)
                 .ifPresent(b -> todoRepository.deleteByTitle(title));
+    }
+
+    @Override
+    public void updateByTitle(String title, Todo todo) {
+        todoRepository.findByTitle(title).orElseThrow(() -> new TodoNotFoundException("Can't find todo to update"));
+
+        if (!title.equals(todo.getTitle())) {
+            todoRepository.findByTitle(todo.getTitle()).ifPresent(t -> {throw new AlreadyPresentException("New title already present!");});
+            deleteByTitle(title);
+        }
+
+        todoRepository.save(todo);
     }
 }

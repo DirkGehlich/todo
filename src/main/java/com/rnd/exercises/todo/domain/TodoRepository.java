@@ -5,7 +5,7 @@ import java.util.Optional;
 
 public interface TodoRepository {
 
-    void add(Todo todo);
+    void save(Todo todo);
 
     Optional<Todo> findByTitle(String title);
 

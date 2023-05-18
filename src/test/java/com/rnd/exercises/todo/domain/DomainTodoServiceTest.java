@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,7 +56,7 @@ class DomainTodoServiceTest {
 
         todoService.add(newTodo);
 
-        verify(todoRepository).add(newTodo);
+        verify(todoRepository).save(newTodo);
     }
 
     @Test
@@ -88,5 +87,51 @@ class DomainTodoServiceTest {
         todoService.deleteByTitle(deleteTodo.getTitle());
 
         verify(todoRepository).deleteByTitle(deleteTodo.getTitle());
+    }
+
+    @Test
+    void givenNoTodoInList_whenTodoUpdated_thenThrowException() {
+        Todo newTodo = createRandomTodo();
+        when(todoRepository.findByTitle(newTodo.getTitle())).thenReturn(Optional.empty());
+
+        final Executable executable = () -> todoService.updateByTitle(newTodo.getTitle(), newTodo);
+
+        assertThrows(TodoNotFoundException.class, executable);
+    }
+
+    @Test
+    void givenTodoAndNewTodoTitleInList_whenTodoUpdated_thenThrowException() {
+        Todo newTodo = createRandomTodo();
+        Todo oldTodo = createRandomTodo();
+        when(todoRepository.findByTitle(oldTodo.getTitle())).thenReturn(Optional.of(oldTodo));
+        when(todoRepository.findByTitle(newTodo.getTitle())).thenReturn(Optional.of(newTodo));
+
+        final Executable executable = () -> todoService.updateByTitle(oldTodo.getTitle(), newTodo);
+
+        assertThrows(AlreadyPresentException.class, executable);
+    }
+
+    @Test
+    void givenTodoInListAndTitlesEqual_whenTodoUpdated_thenSaveNewTodo() {
+        Todo oldTodo = createRandomTodo();
+        Todo newTodo = new Todo(oldTodo.getTitle(), randomAlphabetic(20));
+        when(todoRepository.findByTitle(anyString())).thenReturn(Optional.of(oldTodo), Optional.empty());
+
+        todoService.updateByTitle(oldTodo.getTitle(), newTodo);
+
+        verify(todoRepository, never()).deleteByTitle(any());
+        verify(todoRepository).save(newTodo);
+    }
+
+    @Test
+    void givenTodoInListAndTitlesNotEqual_whenTodoUpdated_thenDeleteOldTodoAndSaveNewTodo() {
+        Todo oldTodo = createRandomTodo();
+        Todo newTodo = createRandomTodo();
+        when(todoRepository.findByTitle(any())).thenReturn(Optional.of(oldTodo), Optional.empty(), Optional.of(oldTodo));
+
+        todoService.updateByTitle(oldTodo.getTitle(), newTodo);
+
+        verify(todoRepository).deleteByTitle(oldTodo.getTitle());
+        verify(todoRepository).save(newTodo);
     }
 }

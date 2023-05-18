@@ -30,4 +30,9 @@ public class TodoController {
     public void delete(@PathVariable String title) {
         todoService.deleteByTitle(title);
     }
+
+    @PutMapping("/{title}")
+    public void delete(@PathVariable String title, @RequestBody final Todo todo) {
+        todoService.updateByTitle(title, todo);
+    }
 }
