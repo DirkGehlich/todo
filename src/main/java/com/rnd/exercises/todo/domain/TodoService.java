@@ -13,4 +13,6 @@ public interface TodoService {
     Iterable<Todo> getAll();
 
     void deleteByTitle(String title);
+
+    void updateByTitle(String title, Todo todo);
 }

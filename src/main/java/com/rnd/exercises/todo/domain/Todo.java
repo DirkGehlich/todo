@@ -14,5 +14,6 @@ public class Todo {
     private String title;
 
     @Getter
+    @Setter
     private String text;
 }

@@ -73,4 +73,13 @@ class TodoControllerTest {
 
         assertEquals(HttpStatus.OK.value(), response.getStatusCode());
     }
+
+    @Test
+    void givenNoTodosInList_whenUpdatingTodo_Return404NotFound() {
+        Todo todo = createRandomTodo();
+
+        Response response = RestAssured.given().contentType(ContentType.JSON).body(todo).put(API_ROOT + "/" + todo.getTitle());
+
+        assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatusCode());
+    }
 }

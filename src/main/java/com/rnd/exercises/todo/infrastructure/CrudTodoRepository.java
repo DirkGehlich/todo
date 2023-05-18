@@ -15,7 +15,7 @@ public class CrudTodoRepository implements TodoRepository {
     SpringDataCrudTodoRepository repo;
 
     @Override
-    public void add(Todo todo) {
+    public void save(Todo todo) {
         repo.save(todo);
     }
 
