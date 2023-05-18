@@ -28,4 +28,9 @@ public class CrudTodoRepository implements TodoRepository {
     public Iterable<Todo> findAll() {
         return repo.findAll();
     }
+
+    @Override
+    public void deleteByTitle(String title) {
+        repo.deleteById(title);
+    }
 }

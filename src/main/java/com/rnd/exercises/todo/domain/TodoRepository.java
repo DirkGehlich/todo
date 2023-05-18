@@ -10,4 +10,6 @@ public interface TodoRepository {
     Optional<Todo> findByTitle(String title);
 
     Iterable<Todo> findAll();
+
+    void deleteByTitle(String title);
 }

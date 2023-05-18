@@ -54,4 +54,23 @@ class TodoControllerTest {
 
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
     }
+
+    @Test
+    void givenNoTodosInList_whenDeletingTodo_Return200Ok() {
+        Todo todo = createRandomTodo();
+
+        Response response = RestAssured.given().contentType(ContentType.JSON).delete(API_ROOT + "/" + todo.getTitle());
+
+        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
+    }
+
+    @Test
+    void givenTodoInList_whenDeletingTodo_DeleteAndReturn200Ok() {
+        Todo todo = createRandomTodo();
+        addTodo(todo);
+
+        Response response = RestAssured.given().contentType(ContentType.JSON).delete(API_ROOT + "/" + todo.getTitle());
+
+        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
+    }
 }

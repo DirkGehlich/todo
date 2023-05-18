@@ -69,4 +69,24 @@ class DomainTodoServiceTest {
 
         assertThrows(AlreadyPresentException.class, executable);
     }
+
+    @Test
+    void givenEmptyTodoList_whenDeleteTodo_thenDoNothing() {
+        Todo deleteTodo = createRandomTodo();
+        when(todoRepository.findByTitle(deleteTodo.getTitle())).thenReturn(Optional.empty());
+
+        todoService.deleteByTitle(deleteTodo.getTitle());
+
+        verify(todoRepository, never()).deleteByTitle(any());
+    }
+
+    @Test
+    void givenTodoInList_whenDeleteTodo_thenDeleteTodo() {
+        Todo deleteTodo = createRandomTodo();
+        when(todoRepository.findByTitle(deleteTodo.getTitle())).thenReturn(Optional.of(deleteTodo));
+
+        todoService.deleteByTitle(deleteTodo.getTitle());
+
+        verify(todoRepository).deleteByTitle(deleteTodo.getTitle());
+    }
 }
