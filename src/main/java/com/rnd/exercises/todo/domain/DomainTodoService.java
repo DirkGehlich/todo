@@ -24,4 +24,11 @@ public class DomainTodoService implements TodoService{
     public Iterable<Todo> getAll() {
         return todoRepository.findAll();
     }
+
+    @Override
+    public void deleteByTitle(String title) {
+        todoRepository
+                .findByTitle(title)
+                .ifPresent(b -> todoRepository.deleteByTitle(title));
+    }
 }

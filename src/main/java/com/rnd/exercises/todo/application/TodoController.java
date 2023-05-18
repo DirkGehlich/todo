@@ -22,8 +22,12 @@ public class TodoController {
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public Iterable<Todo> getAll() {
         return todoService.getAll();
+    }
+
+    @DeleteMapping("/{title}")
+    public void delete(@PathVariable String title) {
+        todoService.deleteByTitle(title);
     }
 }

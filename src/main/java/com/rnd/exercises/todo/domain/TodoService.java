@@ -11,4 +11,6 @@ public interface TodoService {
     void add(Todo todo);
 
     Iterable<Todo> getAll();
+
+    void deleteByTitle(String title);
 }
